@@ -115,25 +115,26 @@ class Resizer {
             case 1: // noop
                 break;   
 
-            case 2:
+            case 2: // flipped horizontally : horizontal flip to correct 
                 break;
                                
-		    case 3:
+		    case 3: // rotated 180 : rotate 180 to correct
+                $this->image = imagerotate($this->image ,180, 0);
                 break;
                    
-		   case 4:
+		   case 4: // vertically flipped : flip vertically to correct
                break;
 		   
-		   case 5:
+		   case 5: // rotated 90CCW and flipped vertically : flip vertically  & rotate 90CW to correct.
                break;
                
-           case 6:
+           case 6: // rotated 90CCW : rotate 90CW to correct.
                break;
 		   
-		   case 7:
+		   case 7: // rotated 90CW and flipped vertically: flip vertically & rotate 90CCW to correct.
                break;
 		   
-		   case 8:
+		   case 8: // rotated 90CW : rotate 90CCW to correct.
                break;
 		 }
 
