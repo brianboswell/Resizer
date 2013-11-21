@@ -116,6 +116,7 @@ class Resizer {
                 break;   
 
             case 2: // flipped horizontally : horizontal flip to correct 
+                $this->horizontal_flip();
                 break;
                                
 		    case 3: // rotated 180 : rotate 180 to correct
@@ -123,6 +124,7 @@ class Resizer {
                 break;
                    
 		   case 4: // vertically flipped : flip vertically to correct
+               $this->vertical_flip();
                break;
 		   
 		   case 5: // rotated 90CCW and flipped vertically : flip vertically  & rotate 90CW to correct.
