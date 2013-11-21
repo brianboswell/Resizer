@@ -26,6 +26,11 @@
  *		// Recompress an image.
  *		Resizer::open( 'path/to/image.jpg' )
  *			->save( 'path/to/new_image.jpg' , 60 );
+ *
+ * 		Resizer::open( mixed $file )
+ *          ->orient()
+ *			->resize( int $width , int $height , string 'exact, portrait, landscape, auto or crop' )
+ *			->save( string 'path/to/file.jpg' , int $quality );
  */
 class Resizer {
 	
@@ -34,6 +39,12 @@ class Resizer {
 	 * @var Resource
 	 */
 	private $image;
+	
+	/**
+	 * Store the path to the image resource which we'll modify.
+	 * @var string
+	 */
+	private $file_path;
 	
 	/**
 	 * Original width of the image we're modifying.
@@ -90,6 +101,60 @@ class Resizer {
 	public static function open( $file )
 	{
 		return new Resizer( $file );
+	}
+
+	/**
+	 * Orients the image according to exif data associated with image file
+	 */
+	public function orient()
+	{
+        $exif = exif_read_data($this->file_path);
+        $ort = $this->key_search($exif, 'Orientation');
+        $orientation = ($ort ? $ort : 1);
+        switch($orientation) {
+            case 1: // noop
+                break;   
+
+            case 2:
+                break;
+                               
+		    case 3:
+                break;
+                   
+		   case 4:
+               break;
+		   
+		   case 5:
+               break;
+               
+           case 6:
+               break;
+		   
+		   case 7:
+               break;
+		   
+		   case 8:
+               break;
+		 }
+
+        return $this;
+	}
+
+	/**
+	 * Search nested array for a particular key, returns the value of the first instance found.
+	 * @param array   $array The array to search
+	 * @param string  &key   The key to search for
+	 * @return [type] The value of the first found key
+	 */
+	private function key_search($array, $key) {
+        if (is_array($array)) {
+            if (array_key_exists('Orientation', $array)) {
+                return $array['Orientation'];
+            } else {
+                foreach ($array as $subarray)
+                    $this->key_search($subarray, $key);
+            } 
+	    }
 	}
 	
 	/**
