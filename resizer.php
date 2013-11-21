@@ -105,8 +105,9 @@ class Resizer {
 
 	/**
 	 * Orients the image according to exif data associated with image file
+     * @return [type]
 	 */
-	public function orient()
+    public function orient()
 	{
         $exif = exif_read_data($this->file_path);
         $ort = $this->key_search($exif, 'Orientation');
@@ -128,15 +129,22 @@ class Resizer {
                break;
 		   
 		   case 5: // rotated 90CCW and flipped vertically : flip vertically  & rotate 90CW to correct.
+               $this->vertical_flip();
+               $this->image = imagerotate($this->image, -90, 0);
                break;
                
            case 6: // rotated 90CCW : rotate 90CW to correct.
+               $this->image = imagerotate($this->image, -90, 0);
+               $this->swap_width_height();
                break;
 		   
-		   case 7: // rotated 90CW and flipped vertically: flip vertically & rotate 90CCW to correct.
+		   case 7: // rotated 90CW and flipped vertically: flip vertically & rotate 90CCW to correct.   
+               $this->vertical_flip();
+               $this->image = imagerotate($this->image, 90, 0);
                break;
 		   
 		   case 8: // rotated 90CW : rotate 90CCW to correct.
+               $this->image = imagerotate($this->image, 90, 0);
                break;
 		 }
 
