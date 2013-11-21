@@ -40,13 +40,21 @@ Then you can start resizing your images by simply calling:
         ->resize( int $width , int $height , string 'exact, portrait, landscape, fit, auto or crop' )
         ->save( string 'path/to/file.jpg' , int $quality );
 
+To add an exif orientation stage to the process simply add it to the chained call:
+
+    Resizer::open( mixed $file )
+        ->orient()
+        ->resize( int $width , int $height , string 'exact, portrait, landscape, fit, auto or crop' )
+        ->save( string 'path/to/file.jpg' , int $quality );
+
 ## Example
 
     Route::post('image/update', function() {
         $img = Input::file('picture');
         
-        // Save a thumbnail
+        // Save a thumbnail preserving the correct orientation specified in the exif data
         $success = Resizer::open( $img )
+            ->orient()
             ->resize( 200 , 200 , 'crop' )
             ->save( 'images/my-new-filename.jpg' , 90 );
         
