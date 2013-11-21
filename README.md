@@ -4,6 +4,8 @@ Simple image resizing bundle for Laravel PHP framework.
 
 This bundle will allow you to resize an uploaded image or any image from the file system with ease. Supported image types are: JPG/JPEG, PNG, GIF.
 
+Forked here to add image orientation according to exif data contained in the image.
+
 ## Installation
 
 Install Resizer using artisan:
