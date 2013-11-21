@@ -128,23 +128,26 @@ class Resizer {
                $this->vertical_flip();
                break;
 		   
-		   case 5: // rotated 90CCW and flipped vertically : flip vertically  & rotate 90CW to correct.
+		   case 5: // rotated 90CCW and flipped vertically : flip vertically  & rotate 90CW to correct. Swap w/h values.
                $this->vertical_flip();
                $this->image = imagerotate($this->image, -90, 0);
+               $this->swap_width_height();
                break;
                
-           case 6: // rotated 90CCW : rotate 90CW to correct.
+           case 6: // rotated 90CCW : rotate 90CW to correct. Swap w/h values.
                $this->image = imagerotate($this->image, -90, 0);
                $this->swap_width_height();
                break;
 		   
-		   case 7: // rotated 90CW and flipped vertically: flip vertically & rotate 90CCW to correct.   
+		   case 7: // rotated 90CW and flipped vertically: flip vertically & rotate 90CCW to correct. Swap w/h values.
                $this->vertical_flip();
                $this->image = imagerotate($this->image, 90, 0);
+               $this->swap_width_height();
                break;
 		   
-		   case 8: // rotated 90CW : rotate 90CCW to correct.
+		   case 8: // rotated 90CW : rotate 90CCW to correct. Swap w/h values.
                $this->image = imagerotate($this->image, 90, 0);
+               $this->swap_width_height();
                break;
 		 }
 
@@ -224,6 +227,17 @@ class Resizer {
             imagecopy($this->image, $cache_line, $right_line_coords["startx"], $right_line_coords["starty"], 0, 0, 1, $line_length);
 	    }
         imagedestroy($cache_line);
+	}
+	
+	/**
+	 * Swap this image's height and width dimensions. 
+     * Reorienting the image according to exif data can leave the image and its recorded dimensions out of sync.
+	 */
+	private function swap_width_height()
+	{
+        $tmp = $this->width;
+        $this->width = $this->height;
+        $this->height = $tmp;
 	}
 	
 	/**
