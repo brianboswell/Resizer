@@ -147,7 +147,8 @@ class Resizer {
 	 * @param string  &key   The key to search for
 	 * @return [type] The value of the first found key
 	 */
-	private function key_search($array, $key) {
+	private function key_search($array, $key) 
+    {
         if (is_array($array)) {
             if (array_key_exists('Orientation', $array)) {
                 return $array['Orientation'];
@@ -156,6 +157,63 @@ class Resizer {
                     $this->key_search($subarray, $key);
             } 
 	    }
+	}
+
+	/**
+	 * Invert the vertical plane of the image.
+	 * Swaps pairs of complementary top & bottom lines working in from the edges to the centre.
+	 */
+	private function vertical_flip()
+    {
+        $axis_length = $this->height;
+        $line_length = $this->width;
+        
+        $cache_line = imagecreatetruecolor($line_length,1);
+
+        /* swapping topline and bottomline, with both converging towards the middle each iteration */
+        for ($i = $axis_length; $i >= $axis_length/2; $i--) {
+            $top_line_coords = ["starty" => $axis_length - $i, "startx" => 0];
+            $bottom_line_coords = ["starty" => $i, "startx" => 0];
+      
+            //save the working top line before we overwrite it
+            imagecopy($cache_line, $this->image, 0, 0, $top_line_coords["startx"], $top_line_coords["starty"], $line_length, 1);
+      
+            //write the working bottom line over the old working top line
+            imagecopy($this->image, $this->image, $top_line_coords["startx"], $top_line_coords["starty"], $bottom_line_coords["startx"], $bottom_line_coords["starty"], $line_length, 1);
+
+            //write the cached working top line over the (now copied) working bottom line
+            imagecopy($this->image, $cache_line, $bottom_line_coords["startx"], $bottom_line_coords["starty"], 0, 0,$line_length,1);
+	    }
+        imagedestroy($cache_line);
+	}
+
+    
+	/**
+	 * Invert the horizontal plane of the image.
+	 * Swaps pairs of complementary right & left lines working in from the edges to the centre.
+	 */
+	private function horizontal_flip()
+    {
+        $axis_length = $this->width;
+        $line_length = $this->height;
+        
+        $cache_line = imagecreatetruecolor(1,$line_length);
+    
+        /* swapping rightline and leftline, with both converging towards the middle each iteration */
+        for ($i = $axis_length; $i >= $axis_length/2; $i--) {
+            $left_line_coords = ["startx" => $axis_length-$i, "starty" => 0];
+            $right_line_coords = ["startx" => $i, "starty" => 0];
+      
+            //save the working left line before we overwrite it
+            imagecopy($cache_line, $this->image, 0, 0, $left_line_coords["startx"], $left_line_coords["starty"], 1, $line_length);
+      
+            //write the working right line over the old working left line
+            imagecopy($this->image, $this->image, $left_line_coords["startx"], $left_line_coords["starty"], $right_line_coords["startx"], $right_line_coords["starty"], 1, $line_length);
+            
+            //write the cached working left line over the (now copied) working right line
+            imagecopy($this->image, $cache_line, $right_line_coords["startx"], $right_line_coords["starty"], 0, 0, 1, $line_length);
+	    }
+        imagedestroy($cache_line);
 	}
 	
 	/**
